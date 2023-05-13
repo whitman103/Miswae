@@ -17,4 +17,5 @@ const vector<countValue> createSortedHistogram(const vector<unsigned int> imageV
         auto it = std::find(presentValues.begin(),presentValues.end(),val);
         std::get<1>(outCounts[std::distance(presentValues.begin(),it)])+=1;
     }
+    return outCounts;
 }
