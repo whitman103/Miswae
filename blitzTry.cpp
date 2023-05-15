@@ -19,7 +19,7 @@ void simpleDecompose(short *data, int rows, int cols){
     storage.ordering() = secondDim, firstDim;
     Array<short, 2> array(data, shape(rows,cols), neverDeleteData, storage);
 
-    WaveletDecomp<2> decomp(WL_CDF_2_2, NONSTD_DECOMP);
+    WaveletDecomp<2> decomp(WL_HAAR, NONSTD_DECOMP);
     decomp.apply(array);
 }
 

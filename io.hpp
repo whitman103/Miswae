@@ -25,7 +25,7 @@ struct OutCacheString{
         }
     }
 
-    void append_bit_and_pending(const int bit, uint64_t &pending_bits){
+    void append_bit_and_pending(const int bit, int &pending_bits){
         this->append(bit);
         while(pending_bits>0){
             this->append(!bit);

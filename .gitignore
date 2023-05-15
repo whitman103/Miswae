@@ -32,3 +32,8 @@
 *.app
 __pycache__/compress_utils.cpython-311.pyc
 basicFloatingEncoder.cpp
+*.pkl
+*.dat
+*.gz
+.vscode/settings.json
+compress

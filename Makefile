@@ -1,24 +1,30 @@
-default: compress pyBlitz
+default: compress compressStubs pyBlitz pyBlitzStubs
 
 
-CXXFLAGS = -O2 -std=c++17 -Wall -shared -fPIC -undefined dynamic_lookup -I/Library/Frameworks/Python.framework/Versions/3.11/include/python3.11 -I/opt/homebrew/include -I/opt/homebrew/Frameworks/Python.framework/Headers
+PYBIND_FLAGS = -O2 -std=c++17 -Wall -shared -fPIC -undefined dynamic_lookup -I/Library/Frameworks/Python.framework/Versions/3.11/include/python3.11 -I/opt/homebrew/include -I/opt/homebrew/Frameworks/Python.framework/Headers
 LIBFLAGS = -L/opt/homebrew/Frameworks/Python.framework/Versions/3.11/lib/python3.11/config-3.11-darwin -ldl -L/opt/homebrew/lib -framework CoreFoundation -lblitzwave
 
 blitzTry.o: blitzTry.cpp
-	g++ -c -O3 blitzTry.cpp -o blitzTry.o $(CXXFLAGS)
+	g++ -c -O3 blitzTry.cpp -o blitzTry.o $(PYBIND_FLAGS)
 
 pyBlitz: blitzTry.o
-	$(CXX) $(CXXFLAGS) $(LIBFLAGS) -o blitzTry.cpython-311-darwin.so blitzTry.o -fPIC 
+	$(CXX) $(PYBIND_FLAGS) $(LIBFLAGS) -o blitzTry.cpython-311-darwin.so blitzTry.o -fPIC 
 
-compress: compressors.o compress.cpp utils.o
-	g++ -g -O0 -std=c++17 compress.cpp utils.o -o compress
+blitzModule:= blitzTry
+
+pyBlitzStubs: pyBlitz
+	${shell python3 -c 'from pybind11_stubgen import ModuleStubsGenerator; module = ModuleStubsGenerator("${blitzModule}"); module.parse(); fp=open("${blitzModule}.pyi","w");fp.write("\n".join(module.to_lines()));fp.close()'}
+
+compressModule:= compress
+
+compress: compress.cpp compressors.hpp utils.o
+	$(CXX) $(PYBIND_FLAGS) $(LIBFLAGS) -o compress.cpython-311-darwin.so compress.cpp utils.o -fPIC
+
+compressStubs: compress
+	${shell python3 -c 'from pybind11_stubgen import ModuleStubsGenerator; module = ModuleStubsGenerator("${compressModule}"); module.parse(); fp=open("${compressModule}.pyi","w");fp.write("\n".join(module.to_lines()));fp.close()'}
 
 utils.o: utils.cpp utils.hpp
 	g++ -c -O3 -std=c++17 utils.cpp -o utils.o
 
-
-compressors.o: compressors.cpp compressors.hpp io.hpp utils.o
-	g++ -c -O3 -std=c++17 compressors.cpp utils.o -o compressors.o
-
 clean:
-	rm compressors.o compress utils.o blitzTry.cpython-311-darwin.so blitzTry.o
+	rm utils.o blitzTry.cpython-311-darwin.so blitzTry.o compress.cpython-311-darwin.so
