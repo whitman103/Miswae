@@ -1,5 +1,5 @@
 from __future__ import annotations
-import blitzTry
+import blitzInterface
 import typing
 import numpy
 _Shape = typing.Tuple[int, ...]

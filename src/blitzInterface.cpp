@@ -52,7 +52,7 @@ void npRecompose(ShortNpArray& inData){
 }
 
 
-PYBIND11_MODULE(blitzTry, m){
+PYBIND11_MODULE(blitzInterface, m){
     m.def("decompose",&npDecompose)
     .def("recompose",&npRecompose);
 }
