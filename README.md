@@ -1,11 +1,8 @@
-<p align="center">
-  <a href="https://example.com/">
-    <img src="https://via.placeholder.com/72" alt="Logo" width=72 height=72>
-  </a>
+<p>
 
-  <h3 align="center">Logo</h3>
+  <h3 align="center">Medical Imaging Compression with Stationary Wavelets and Arithmetic Encoding (Miswae)</h3>
 </p>
-
+![Example](logo.png)
 
 ## Table of contents
 
